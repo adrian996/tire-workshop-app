@@ -1,0 +1,28 @@
+table {
+  width: 100%;
+}
+
+/* #bookbutton{
+  width: 50%;
+  margin: 0 auto;
+} */
+
+mat-form-field{
+  margin: 1%;
+}
+
+button:hover{
+  color: aqua;
+}
+
+
+#workshopinfolabel{
+  padding-top: 2%;
+}
+
+
+
+body{
+  padding-left: 25%;
+  padding-right: 25%;
+}

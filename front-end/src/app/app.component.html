@@ -1,0 +1,87 @@
+<header>
+  <mat-toolbar>
+    <span>Book tire change time</span>
+  </mat-toolbar>
+</header>
+
+<body>
+
+  <mat-card>
+    <div>
+      <mat-form-field>
+        <mat-label>Select a workshop</mat-label>
+        <mat-select [(value)]="currentWorkShopValue">
+          <!-- <mat-option *ngFor="let workshop of workShops" [ngValue]="currentWorkShop">{{workshop.name}}</mat-option> -->
+          <mat-option value="0">Manchester workshop</mat-option>
+          <mat-option value="1">London workshop</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+
+      <mat-form-field>
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="rangePicker">
+          <input [(ngModel)]="from" matStartDate placeholder="From">{{from}}
+          <input [(ngModel)]="until" matEndDate placeholder="Until">{{until}}
+        </mat-date-range-input>
+      </mat-form-field>
+      <mat-datepicker-toggle matIconSuffix [for]="rangePicker"></mat-datepicker-toggle>
+      <mat-date-range-picker #rangePicker></mat-date-range-picker>
+
+
+      <button (click)="findTimes()" style="margin-left: 5%" mat-flat-button color="primary">Find times <mat-icon>search
+        </mat-icon></button>
+    </div>
+
+    <mat-card-content>
+      <div #datatable class="mat-elevation-z9" *ngIf="dataLoaded && currentWorkShop!=null">
+        <div style="padding-top: 2%; padding-left: 2%;">
+          <label [hidden]="currentWorkShop == 1"><b> Manchester workshop - {{workShops[0].address}}<br></b></label>
+
+          <label [hidden]="currentWorkShop == 1">Vehicle types: {{workShops[0].vehicles}}</label>
+          <label [hidden]="currentWorkShop == 0"><b> London workshop - {{workShops[1].address}}</b></label>
+          <br>
+          <label [hidden]="currentWorkShop == 0">Serviceable vehicle types: {{workShops[1].vehicles}}</label>
+        </div>
+        <table mat-table [dataSource]="dataSource">
+          <ng-container matColumnDef="time">
+            <th mat-header-cell *matHeaderCellDef><label style="margin-right: 30%;">Book</label> Available times</th>
+            <td mat-cell *matCellDef="let element ">
+              <button style="margin-right: 30%;" #bookbutton [disabled]="currentWorkShop == 0 && !element.available"
+              (click)="currentWorkShop == 0 ? openDialog(namedialog, element.id) : openDialog(namedialog, element.uuid)" mat-icon-button color="warn" aria-label="Book time">
+              <mat-icon>add</mat-icon>
+            </button>
+              {{element.time | date:'medium':'GMT'}}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <mat-paginator *ngIf="currentWorkShop != null" [pageSizeOptions]="[5, 10]" showFirstLastButtons aria-label="Select page">
+      </mat-paginator>
+    </mat-card-content>
+
+
+
+
+  </mat-card>
+
+</body>
+
+
+
+
+
+<ng-template #namedialog>
+  <h1 mat-dialog-title>Enter your name</h1>
+<div mat-dialog-content>
+  <mat-form-field class="example-full-width">
+    <mat-label>Name</mat-label>
+    <input [(ngModel)]="client.contactInformation" matInput appearance="fill" placeholder="Name">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="bookTime()" mat-button>Book time</button>
+</div>
+  </ng-template>
